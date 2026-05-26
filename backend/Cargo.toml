@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.102"
 argon2 = { version = "0.5.3", features = ["std"] }
 axum = { version = "0.8.9", features = ["multipart", "macros", "ws"] }
 axum-extra = { version = "0.12.6", features = ["cookie"] }
@@ -23,3 +24,5 @@ thiserror = "2.0.18"
 tokio = { version = "1.52.3", features = ["full"] }
 tower = "0.5.3"
 validator = { version = "0.20.0", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
