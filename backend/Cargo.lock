@@ -230,6 +230,7 @@ dependencies = [
  "futures",
  "http",
  "jsonwebtoken",
+ "lav-seed",
  "rand 0.10.1",
  "redis",
  "serde",
@@ -1483,6 +1484,12 @@ dependencies = [
  "signature",
  "zeroize",
 ]
+
+[[package]]
+name = "lav-seed"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "35634d2c47547c7813e232493e6b7b5d1a0efcdc00abc56d453bfd393c31ca60"
 
 [[package]]
 name = "lazy_static"

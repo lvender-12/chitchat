@@ -1,0 +1,20 @@
+app:
+  name: Chat-App
+  host: localhost
+  port: 3000
+db:
+  host: localhost
+  port: 3306
+  username: root
+  password: Your_Password
+  name: Your_Database
+redis:
+  host: localhost
+  port: 3306
+  username: lvender
+  password: Your_Password
+jwt:
+  secret: Your_Secret
+  expiry: 86400
+api:
+  secret: Your_Secret
