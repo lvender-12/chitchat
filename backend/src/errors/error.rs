@@ -47,6 +47,9 @@ pub enum AppError {
 
     #[error(transparent)]
     Argon2(#[from] argon2::password_hash::Error),
+
+    #[error(transparent)]
+    LavSeed(#[from] lav_seed::LavError),
 }
 
 impl IntoResponse for AppError {
@@ -88,6 +91,13 @@ impl IntoResponse for AppError {
             }
             AppError::Argon2(e) => {
                 eprintln!("argon2 error: {e}");
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "internal server error".to_string(),
+                )
+            }
+            AppError::LavSeed(e) => {
+                eprintln!("uuid generation error: {e}");
                 (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     "internal server error".to_string(),

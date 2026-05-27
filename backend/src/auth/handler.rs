@@ -1,14 +1,19 @@
-use axum::extract::State;
+use axum::{Json, extract::State, response::IntoResponse};
 use http::StatusCode;
 use validator::Validate;
 
-use crate::{app::AppState, auth::dto::RegisterDto, errors::error::AppResult};
+use crate::{
+    app::AppState,
+    auth::{dto::RegisterDto, service::register_service},
+    errors::error::AppResult,
+};
 
+#[axum::debug_handler]
 pub async fn register_handler(
     State(state): State<AppState>,
-    body: RegisterDto,
-) -> AppResult<(StatusCode, String)> {
+    Json(body): Json<RegisterDto>,
+) -> AppResult<impl IntoResponse> {
     body.validate()?;
-
-    Ok((StatusCode::CREATED, "Berhasil Mendaftar".to_string()))
+    register_service(&state, body).await?;
+    Ok((StatusCode::CREATED, Json("Berhasil Mendaftar")))
 }

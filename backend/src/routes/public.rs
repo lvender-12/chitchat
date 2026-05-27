@@ -1,11 +1,7 @@
-use axum::{Router, extract::State, routing::get};
+use axum::{Router, routing::post};
 
-use crate::app::AppState;
-
-pub async fn hello(State(state): State<AppState>) -> String {
-    format!("HALLO")
-}
+use crate::{app::AppState, auth::handler::register_handler};
 
 pub fn public_route() -> Router<AppState> {
-    Router::new().route("/", get(hello))
+    Router::new().route("/register", post(register_handler))
 }
