@@ -1490,9 +1490,9 @@ dependencies = [
 
 [[package]]
 name = "lav-seed"
-version = "0.1.0"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35634d2c47547c7813e232493e6b7b5d1a0efcdc00abc56d453bfd393c31ca60"
+checksum = "5641ef4b947b3e54c3134eacf76bdd6aa25919c90797eb53da5a33258470e2ec"
 
 [[package]]
 name = "lazy_static"

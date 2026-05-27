@@ -3,7 +3,7 @@ use std::time::Duration;
 use anyhow::{Context, Result};
 use sqlx::{Pool, Postgres, postgres::PgPoolOptions};
 
-use crate::config_model::DbConfig;
+use crate::model::config_model::DbConfig;
 
 pub async fn load_db(conf: &DbConfig) -> Result<Pool<Postgres>> {
     let url = format!(

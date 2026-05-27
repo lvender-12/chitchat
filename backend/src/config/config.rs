@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use config::{Config, File, FileFormat};
 
-use crate::config_model::ConfigModel;
+use crate::model::config_model::ConfigModel;
 
 pub fn load_config() -> Result<ConfigModel> {
     let conf: ConfigModel = Config::builder()

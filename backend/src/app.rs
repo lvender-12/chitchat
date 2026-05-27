@@ -4,7 +4,7 @@ use axum::Router;
 use redis::aio::MultiplexedConnection;
 use tokio::sync::Mutex;
 
-use crate::public::public_route;
+use crate::routes::public::public_route;
 
 #[derive(Clone)]
 pub struct AppState {

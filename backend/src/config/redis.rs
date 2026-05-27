@@ -4,7 +4,7 @@ use anyhow::{Context, Result};
 use redis::{Client, aio::MultiplexedConnection};
 use tokio::sync::Mutex;
 
-use crate::config_model::RedisConfig;
+use crate::model::config_model::RedisConfig;
 
 pub async fn load_redis(conf: &RedisConfig) -> Result<Arc<Mutex<MultiplexedConnection>>> {
     let url = format!(
