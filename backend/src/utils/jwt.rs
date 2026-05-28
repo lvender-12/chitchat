@@ -6,9 +6,9 @@ use crate::errors::error::AppResult;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
-    sub: String,
-    email: String,
-    exp: u64,
+    pub sub: String,
+    pub email: String,
+    pub exp: u64,
 }
 
 pub fn generate_jwt(uuid: String, email: String, secret: &str, exp: u64) -> AppResult<String> {
@@ -35,4 +35,9 @@ pub fn decode_jwt(token: &str, secret: &str) -> AppResult<Claims> {
         &Validation::default(),
     )?;
     Ok(decode.claims)
+}
+
+pub fn get_uuid_from_token(token: &str, secret: &str) -> AppResult<String> {
+    let claims = decode_jwt(token, secret)?;
+    Ok(claims.sub)
 }

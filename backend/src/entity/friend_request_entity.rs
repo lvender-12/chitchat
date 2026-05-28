@@ -1,6 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::Type;
+use uuid::Uuid;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Type)]
 #[sqlx(type_name = "friend_status", rename_all = "lowercase")]
@@ -18,7 +19,7 @@ impl Default for FriendStatus {
 
 #[derive(Debug, Clone, Serialize, Deserialize, sqlx::FromRow)]
 pub struct FriendRequest {
-    pub uuid: String,
+    pub uuid: Uuid,
     pub from_user_id: String,
     pub to_user_id: String,
     pub status: FriendStatus,

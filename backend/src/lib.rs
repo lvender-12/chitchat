@@ -7,4 +7,5 @@ pub mod errors;
 pub mod middleware;
 pub mod model;
 pub mod routes;
+pub mod user;
 pub mod utils;
