@@ -13,13 +13,18 @@ async fn main() {
         .await
         .expect("Gagal konek ke Redis, pastikan Redis menyala dan config benar");
 
-    let state = AppState { db, redis };
-    let app = create_app(state);
     let host = format!("{}:{}", conf.app.host, conf.app.port);
-    let listener = tokio::net::TcpListener::bind(host)
+
+    let state = AppState {
+        db,
+        redis,
+        config: conf,
+    };
+    let app = create_app(state);
+    let listener = tokio::net::TcpListener::bind(&host)
         .await
         .expect("Failed to bind TCP listener");
 
-    println!("listening on {}:{}", conf.app.host, conf.app.port);
+    println!("listening on {}", host);
     axum::serve(listener, app).await.expect("Server crashed");
 }

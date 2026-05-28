@@ -10,3 +10,11 @@ pub struct RegisterDto {
     #[validate(length(min = 8))]
     pub password: String,
 }
+
+#[derive(Debug, Clone, Deserialize, Validate)]
+pub struct LoginDto {
+    #[validate(email)]
+    pub email: String,
+    #[validate(length(min = 8))]
+    pub password: String,
+}

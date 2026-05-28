@@ -20,7 +20,7 @@ pub async fn count_users(state: &AppState) -> AppResult<i64> {
 pub async fn register_repository(
     state: &AppState,
     user: RegisterDto,
-    uuid: String,
+    uuid: &String,
 ) -> AppResult<()> {
     sqlx::query("INSERT INTO users (uuid, name, email, password) VALUES ($1, $2, $3, $4)")
         .bind(uuid)

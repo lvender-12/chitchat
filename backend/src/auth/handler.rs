@@ -4,7 +4,11 @@ use validator::Validate;
 
 use crate::{
     app::AppState,
-    auth::{dto::RegisterDto, service::register_service},
+    auth::{
+        dto::{LoginDto, RegisterDto},
+        service::{login_service, register_service},
+    },
+    common::response::ApiResponse,
     errors::error::AppResult,
 };
 
@@ -15,5 +19,27 @@ pub async fn register_handler(
 ) -> AppResult<impl IntoResponse> {
     body.validate()?;
     register_service(&state, body).await?;
-    Ok((StatusCode::CREATED, Json("Berhasil Mendaftar")))
+    Ok((
+        StatusCode::CREATED,
+        Json(ApiResponse {
+            data: serde_json::json!({}),
+            message: "Berhasil Mendaftar".to_string(),
+        }),
+    ))
+}
+
+pub async fn login_handler(
+    State(state): State<AppState>,
+    Json(body): Json<LoginDto>,
+) -> AppResult<impl IntoResponse> {
+    body.validate()?;
+    let cookies = login_service(&state, body).await?;
+    Ok((
+        StatusCode::OK,
+        cookies,
+        Json(ApiResponse {
+            data: serde_json::json!({}),
+            message: "Berhasil Login".to_string(),
+        }),
+    ))
 }

@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct ConfigModel {
     pub app: AppConfig,
     pub db: DbConfig,
@@ -9,14 +9,14 @@ pub struct ConfigModel {
     pub api: ApiConfig,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct AppConfig {
     pub name: String,
     pub host: String,
     pub port: u16,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct DbConfig {
     pub host: String,
     pub port: u16,
@@ -25,7 +25,7 @@ pub struct DbConfig {
     pub name: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct RedisConfig {
     pub host: String,
     pub port: u16,
@@ -33,13 +33,13 @@ pub struct RedisConfig {
     pub password: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct JwtConfig {
     pub secret: String,
     pub expiry: u64,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct ApiConfig {
     pub secret: String,
 }
