@@ -9,3 +9,8 @@ pub struct ProfileUser {
     pub email: String,
     pub created_at: DateTime<Utc>,
 }
+
+#[derive(Debug, Serialize, FromRow)]
+pub struct AddFriendPayload {
+    pub uuid: String,
+}
