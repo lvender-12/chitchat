@@ -10,7 +10,7 @@ use crate::{
         not_found::not_found_middleware,
     },
     model::config_model::ConfigModel,
-    routes::public::public_route,
+    routes::{protected::protected_route, public::public_route},
 };
 
 #[derive(Clone)]
@@ -23,6 +23,7 @@ pub struct AppState {
 pub fn create_app(state: AppState) -> Router {
     Router::new()
         .merge(public_route())
+        .merge(protected_route(state.clone()))
         .with_state(state.clone())
         .fallback(not_found_middleware)
         .method_not_allowed_fallback(method_not_allowed)
