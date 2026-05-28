@@ -1,4 +1,7 @@
-use axum_extra::extract::{CookieJar, cookie::Cookie};
+use axum_extra::extract::{
+    CookieJar,
+    cookie::{Cookie, SameSite},
+};
 
 use crate::{
     app::AppState,
@@ -57,6 +60,7 @@ pub async fn login_service(state: &AppState, body: LoginDto) -> AppResult<Cookie
 
     let cookie = Cookie::build(("token", token))
         .http_only(true)
+        .same_site(SameSite::Strict)
         .path("/")
         .build();
 

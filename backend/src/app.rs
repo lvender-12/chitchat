@@ -1,10 +1,17 @@
 use std::sync::Arc;
 
-use axum::Router;
+use axum::{Router, middleware::from_fn_with_state};
 use redis::aio::MultiplexedConnection;
 use tokio::sync::Mutex;
 
-use crate::{model::config_model::ConfigModel, routes::public::public_route};
+use crate::{
+    middleware::{
+        api_keys::api_keys_middleware, method_not_allowed::method_not_allowed,
+        not_found::not_found_middleware,
+    },
+    model::config_model::ConfigModel,
+    routes::public::public_route,
+};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -14,5 +21,10 @@ pub struct AppState {
 }
 
 pub fn create_app(state: AppState) -> Router {
-    Router::new().merge(public_route()).with_state(state)
+    Router::new()
+        .merge(public_route())
+        .with_state(state.clone())
+        .fallback(not_found_middleware)
+        .method_not_allowed_fallback(method_not_allowed)
+        .layer(from_fn_with_state(state, api_keys_middleware))
 }

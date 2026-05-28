@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::errors::error::AppResult;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Claims {
     sub: String,
     email: String,
