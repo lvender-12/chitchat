@@ -50,6 +50,9 @@ pub enum AppError {
 
     #[error(transparent)]
     LavSeed(#[from] lav_seed::LavError),
+
+    #[error(transparent)]
+    SerdeJson(#[from] serde_json::Error),
 }
 
 impl IntoResponse for AppError {
@@ -98,6 +101,14 @@ impl IntoResponse for AppError {
             }
             AppError::LavSeed(e) => {
                 eprintln!("uuid generation error: {e}");
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "internal server error".to_string(),
+                )
+            }
+
+            AppError::SerdeJson(e) => {
+                eprintln!("serde json error: {e}");
                 (
                     StatusCode::INTERNAL_SERVER_ERROR,
                     "internal server error".to_string(),

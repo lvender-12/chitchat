@@ -1,8 +1,9 @@
 use crate::{
     app::AppState,
+    cache::user_cache::{get_user_cache, set_user_cache},
     errors::error::{AppError, AppResult},
     user::{
-        dto::{FriendList, FriendRequestReceived, FriendRequestSent, ProfileUser},
+        dto::{FriendList, FriendRequestReceived, FriendRequestSent, ProfileUser, UserCache},
         repository::{
             add_friend_repository, all_friend_repository, find_by_uuid, friend_accepted_repository,
             friend_received_repository, friend_rejected_repository, friend_sent_repository,
@@ -12,7 +13,28 @@ use crate::{
 };
 
 pub async fn profile_service(state: &AppState, uuid: String) -> AppResult<ProfileUser> {
+    if let Some(user) = get_user_cache(state, &uuid).await? {
+        println!("REDIS HIT");
+        return Ok(ProfileUser {
+            uuid: user.uuid,
+            name: user.name,
+            email: user.email,
+            created_at: user.created_at,
+        });
+    }
+    println!("REDIS MISS");
+
     let profile = profile_repository(state, uuid).await?;
+
+    let cache = UserCache {
+        uuid: profile.uuid.clone(),
+        name: profile.name.clone(),
+        email: profile.email.clone(),
+        created_at: profile.created_at,
+    };
+
+    set_user_cache(state, &cache).await?;
+
     Ok(profile)
 }
 
@@ -76,6 +98,42 @@ pub async fn friend_rejected_service(
 }
 
 pub async fn all_friend_service(state: &AppState, uuid: String) -> AppResult<Vec<FriendList>> {
-    let user = all_friend_repository(state, uuid).await?;
-    Ok(user)
+    let friends = all_friend_repository(state, uuid).await?;
+
+    let mut result = Vec::new();
+
+    for friend in friends {
+        let user = if let Some(cached) = get_user_cache(state, &friend.friend_id).await? {
+            println!("REDIS HIT");
+
+            cached
+        } else {
+            println!("REDIS MISS");
+
+            let db_user = find_by_uuid(state, &friend.friend_id)
+                .await?
+                .ok_or(AppError::NotFound("user not found".to_string()))?;
+
+            let cache = UserCache {
+                uuid: db_user.uuid.clone(),
+                name: db_user.name.clone(),
+                email: db_user.email.clone(),
+                created_at: db_user.created_at,
+            };
+
+            set_user_cache(state, &cache).await?;
+
+            cache
+        };
+
+        result.push(FriendList {
+            uuid: user.uuid,
+            name: user.name,
+            email: user.email,
+            conversation_id: friend.conversation_id,
+            created_at: user.created_at,
+        });
+    }
+
+    Ok(result)
 }

@@ -25,6 +25,16 @@ async fn main() {
         config: conf,
         tx,
     };
+
+    {
+        let mut conn = state.redis.lock().await;
+        redis::cmd("FLUSHDB")
+            .query_async::<()>(&mut *conn)
+            .await
+            .expect("Gagal flush Redis");
+        println!("Redis flushed");
+    }
+
     let app = create_app(state);
     let listener = tokio::net::TcpListener::bind(&host)
         .await

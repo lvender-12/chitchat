@@ -2,7 +2,7 @@ use crate::{
     app::AppState,
     entity::user_entity::User,
     errors::error::AppResult,
-    user::dto::{FriendList, FriendRequestReceived, FriendRequestSent, ProfileUser},
+    user::dto::{FriendRaw, FriendRequestReceived, FriendRequestSent, ProfileUser},
 };
 
 pub async fn profile_repository(state: &AppState, uuid: String) -> AppResult<ProfileUser> {
@@ -123,17 +123,28 @@ pub async fn friend_rejected_repository(
     Ok(())
 }
 
-pub async fn all_friend_repository(state: &AppState, uuid: String) -> AppResult<Vec<FriendList>> {
-    let friends = sqlx::query_as::<_, FriendList>(
-        "SELECT u.uuid, u.name, u.email, c.uuid::TEXT as conversation_id, u.created_at
+pub async fn all_friend_repository(state: &AppState, uuid: String) -> AppResult<Vec<FriendRaw>> {
+    let friends = sqlx::query_as::<_, FriendRaw>(
+        "
+        SELECT
+            f.friend_id,
+            c.uuid::TEXT as conversation_id
         FROM friends f
-        JOIN users u ON u.uuid = f.friend_id
-        JOIN conversations c ON (c.user1_id = f.user_id AND c.user2_id = f.friend_id)
-                             OR (c.user1_id = f.friend_id AND c.user2_id = f.user_id)
-        WHERE f.user_id = $1",
+        JOIN conversations c
+            ON (
+                c.user1_id = f.user_id
+                AND c.user2_id = f.friend_id
+            )
+            OR (
+                c.user1_id = f.friend_id
+                AND c.user2_id = f.user_id
+            )
+        WHERE f.user_id = $1
+        ",
     )
     .bind(uuid)
     .fetch_all(&state.db)
     .await?;
+
     Ok(friends)
 }

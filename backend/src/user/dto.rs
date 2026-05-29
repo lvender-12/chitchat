@@ -1,11 +1,11 @@
 use chrono::{DateTime, Utc};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 use uuid::Uuid;
 
 use crate::entity::friend_request_entity::FriendStatus;
 
-#[derive(Debug, Serialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct ProfileUser {
     pub uuid: String,
     pub name: String,
@@ -37,5 +37,19 @@ pub struct FriendList {
     pub name: String,
     pub email: String,
     pub conversation_id: String,
-    pub created_at: Option<DateTime<Utc>>,
+    pub created_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UserCache {
+    pub uuid: String,
+    pub name: String,
+    pub email: String,
+    pub created_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Serialize, FromRow)]
+pub struct FriendRaw {
+    pub friend_id: String,
+    pub conversation_id: String,
 }

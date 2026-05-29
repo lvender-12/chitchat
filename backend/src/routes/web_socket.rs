@@ -1,8 +1,4 @@
-use axum::{
-    Router,
-    middleware::from_fn_with_state,
-    routing::{get, post},
-};
+use axum::{Router, middleware::from_fn_with_state, routing::get};
 
 use crate::{app::AppState, message::handler::ws_handler, middleware::auth::auth_middleware};
 
