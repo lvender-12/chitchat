@@ -8,7 +8,11 @@ use axum::{
 };
 
 use crate::{
-    app::AppState, entity::message_entity::Message as MessageEntity, message::dto::ChatMessage,
+    app::AppState,
+    message::{
+        dto::IncomingMessage,
+        service::{get_messages_service, save_message_service},
+    },
     utils::jwt::Claims,
 };
 
@@ -29,22 +33,33 @@ pub async fn handle_socket_message(
 ) {
     let mut rx = state.tx.subscribe();
     let sender_id = claims.sub;
+
+    if let Ok(messages) = get_messages_service(&state, &conversation_id).await {
+        if let Ok(json) = serde_json::to_string(&messages) {
+            let _ = socket.send(Message::Text(json.into())).await;
+        }
+    }
+
     loop {
         tokio::select! {
         Some(Ok(msg)) = socket.recv() => {
-                        if let Message::Text(text) = msg {
-                            if let Ok(chat_msg) = serde_json::from_str::<ChatMessage>(&text) {
-                                let _ = state.tx.send(chat_msg);
-                            }
-                        }
-                    }
-                    Ok(chat_msg) = rx.recv() => {
-                        if chat_msg.conversation_id == conversation_id
-                            && chat_msg.sender_id != sender_id {
-                            let json = serde_json::to_string(&chat_msg).unwrap();
-                            let _ = socket.send(Message::Text(json.into())).await;
-                        }
+            if let Message::Text(text) = msg {
+                if let Ok(incoming) =
+                    serde_json::from_str::<IncomingMessage>(&text)
+                {
+                    if let Err(e) = save_message_service(&state, sender_id.clone(), conversation_id.clone(), incoming.message.clone()).await {
+                        eprintln!("ws_service error: {:?}", e);
                     }
                 }
+            }
+        }
+        Ok(chat_msg) = rx.recv() => {
+            if chat_msg.conversation_id == conversation_id
+                && chat_msg.sender_id != sender_id {
+                let json = serde_json::to_string(&chat_msg).unwrap();
+                let _ = socket.send(Message::Text(json.into())).await;
+            }
+        }
+        }
     }
 }

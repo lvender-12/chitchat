@@ -6,3 +6,8 @@ pub struct ChatMessage {
     pub sender_id: String,
     pub message: String,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct IncomingMessage {
+    pub message: String,
+}
