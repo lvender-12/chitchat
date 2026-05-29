@@ -10,7 +10,7 @@ use crate::{
         not_found::not_found_middleware,
     },
     model::config_model::ConfigModel,
-    routes::{protected::protected_route, public::public_route},
+    routes::{protected::protected_route, public::public_route, web_socket::ws_route},
 };
 
 #[derive(Clone)]
@@ -24,8 +24,9 @@ pub fn create_app(state: AppState) -> Router {
     Router::new()
         .merge(public_route())
         .merge(protected_route(state.clone()))
-        .with_state(state.clone())
+        .merge(ws_route(state.clone()))
+        .layer(from_fn_with_state(state.clone(), api_keys_middleware))
+        .with_state(state)
         .fallback(not_found_middleware)
         .method_not_allowed_fallback(method_not_allowed)
-        .layer(from_fn_with_state(state, api_keys_middleware))
 }

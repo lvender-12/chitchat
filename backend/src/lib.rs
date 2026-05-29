@@ -4,6 +4,7 @@ pub mod common;
 pub mod config;
 pub mod entity;
 pub mod errors;
+pub mod message;
 pub mod middleware;
 pub mod model;
 pub mod routes;
