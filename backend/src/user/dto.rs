@@ -36,5 +36,6 @@ pub struct FriendList {
     pub uuid: String,
     pub name: String,
     pub email: String,
+    pub conversation_id: String,
     pub created_at: Option<DateTime<Utc>>,
 }

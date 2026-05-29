@@ -125,10 +125,12 @@ pub async fn friend_rejected_repository(
 
 pub async fn all_friend_repository(state: &AppState, uuid: String) -> AppResult<Vec<FriendList>> {
     let friends = sqlx::query_as::<_, FriendList>(
-        "SELECT u.uuid, u.name, u.email, u.created_at
-            FROM friends f
-            JOIN users u ON u.uuid = f.friend_id
-            WHERE f.user_id = $1",
+        "SELECT u.uuid, u.name, u.email, c.uuid::TEXT as conversation_id, u.created_at
+        FROM friends f
+        JOIN users u ON u.uuid = f.friend_id
+        JOIN conversations c ON (c.user1_id = f.user_id AND c.user2_id = f.friend_id)
+                             OR (c.user1_id = f.friend_id AND c.user2_id = f.user_id)
+        WHERE f.user_id = $1",
     )
     .bind(uuid)
     .fetch_all(&state.db)
