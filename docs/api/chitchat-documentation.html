@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>chitchat - API Documentation</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            #opencollection-container {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdn.opencollection.com/docs.css" />
+        <script src="https://cdn.opencollection.com/docs.js"></script>
+    </head>
+    <body>
+        <div id="opencollection-container"></div>
+        <script>
+            const collectionData =
+                'opencollection: 1.0.0\ninfo:\n  name: chitchat\nconfig:\n  proxy:\n    inherit: true\n    config:\n      protocol: http\n      hostname: \'\'\n      port: \'\'\n      auth:\n        username: \'\'\n        password: \'\'\n      bypassProxy: \'\'\nitems:\n  - info:\n      name: protected\n      type: folder\n      seq: 2\n    request:\n      headers:\n        - name: Cookie\n          value: token=your jwt token\n      auth: inherit\n    items:\n      - info:\n          name: profile\n          type: http\n          seq: 1\n        http:\n          method: GET\n          url: http://localhost:3000/user/profile\n          auth: inherit\n        settings:\n          encodeUrl: true\n          timeout: 0\n          followRedirects: true\n          maxRedirects: 5\n      - info:\n          name: friends\n          type: folder\n          seq: 2\n        request:\n          auth: inherit\n        items:\n          - info:\n              name: Add Friend\n              type: http\n              seq: 1\n            http:\n              method: POST\n              url: http://localhost:3000/user/friend/add/43904230\n              auth: inherit\n            settings:\n              encodeUrl: true\n              timeout: 0\n              followRedirects: true\n              maxRedirects: 5\n          - info:\n              name: accept request\n              type: http\n              seq: 4\n            http:\n              method: PATCH\n              url: http://localhost:3000/user/friend/53904237/accept\n              auth: inherit\n            settings:\n              encodeUrl: true\n              timeout: 0\n              followRedirects: true\n              maxRedirects: 5\n          - info:\n              name: friend list\n              type: http\n              seq: 6\n            http:\n              method: GET\n              url: http://localhost:3000/user/friend/list\n              auth: inherit\n            settings:\n              encodeUrl: true\n              timeout: 0\n              followRedirects: true\n              maxRedirects: 5\n          - info:\n              name: friend recieve request\n              type: http\n              seq: 3\n            http:\n              method: GET\n              url: http://localhost:3000/user/friend/pending/received\n              auth: inherit\n            settings:\n              encodeUrl: true\n              timeout: 0\n              followRedirects: true\n              maxRedirects: 5\n          - info:\n              name: friend sent request\n              type: http\n              seq: 2\n            http:\n              method: GET\n              url: http://localhost:3000/user/friend/pending/sent\n              auth: inherit\n            settings:\n              encodeUrl: true\n              timeout: 0\n              followRedirects: true\n              maxRedirects: 5\n          - info:\n              name: rejected request\n              type: http\n              seq: 5\n            http:\n              method: PATCH\n              url: http://localhost:3000/user/friend/33904223/reject\n              auth: inherit\n            settings:\n              encodeUrl: true\n              timeout: 0\n              followRedirects: true\n              maxRedirects: 5\n      - info:\n          name: message\n          type: folder\n          seq: 3\n        request:\n          auth: inherit\n        items:\n          - info:\n              name: message\n              type: websocket\n              seq: 1\n            websocket:\n              url: ws://localhost:3000/ws/message/0ddd8cad-297a-42f3-9e25-c1e868ca178d\n              message:\n                type: json\n                data: \'{"message":"halo!"}\'\n              auth: inherit\n  - info:\n      name: public\n      type: folder\n      seq: 1\n    request:\n      auth: inherit\n    items:\n      - info:\n          name: login\n          type: http\n          seq: 1\n        http:\n          method: POST\n          url: http://localhost:3000/auth/login\n          body:\n            type: json\n            data: |-\n              {\n                "email": "kurumi@gmail.com",\n                "password": "kurumi181205"\n              }\n          auth: inherit\n        settings:\n          encodeUrl: true\n          timeout: 0\n          followRedirects: true\n          maxRedirects: 5\n      - info:\n          name: register\n          type: http\n          seq: 2\n        http:\n          method: POST\n          url: http://localhost:3000/auth/register\n          body:\n            type: json\n            data: |-\n              {\n                "name": "kurumi",\n                "email": "kurumi@gmail.com",\n                "password": "kurumi181205"\n              }\n          auth: inherit\n        settings:\n          encodeUrl: true\n          timeout: 0\n          followRedirects: true\n          maxRedirects: 5\nrequest:\n  headers:\n    - name: X-API-SECRET\n      value: your secret api\n    - name: Content-Type\n      value: application/json\nbundled: true\nextensions:\n  bruno:\n    ignore:\n      - node_modules\n      - .git\n    exportedAt: \'2026-05-29T16:52:45.795Z\'\n    exportedUsing: Bruno/3.4.2\n';
+            new window.OpenCollection({
+                target: document.getElementById("opencollection-container"),
+                opencollection: collectionData,
+                theme: "light",
+            });
+        </script>
+    </body>
+</html>
