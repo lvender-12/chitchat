@@ -1,7 +1,9 @@
 use backend::{
     app::{AppState, create_app},
     config::{config::load_config, db::load_db, redis::load_redis},
+    message::dto::ChatMessage,
 };
+use tokio::sync::broadcast;
 
 #[tokio::main]
 async fn main() {
@@ -15,10 +17,13 @@ async fn main() {
 
     let host = format!("{}:{}", conf.app.host, conf.app.port);
 
+    let (tx, _) = broadcast::channel::<ChatMessage>(100);
+
     let state = AppState {
         db,
         redis,
         config: conf,
+        tx,
     };
     let app = create_app(state);
     let listener = tokio::net::TcpListener::bind(&host)

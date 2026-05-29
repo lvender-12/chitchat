@@ -2,9 +2,10 @@ use std::sync::Arc;
 
 use axum::{Router, middleware::from_fn_with_state};
 use redis::aio::MultiplexedConnection;
-use tokio::sync::Mutex;
+use tokio::sync::{Mutex, broadcast};
 
 use crate::{
+    message::dto::ChatMessage,
     middleware::{
         api_keys::api_keys_middleware, method_not_allowed::method_not_allowed,
         not_found::not_found_middleware,
@@ -18,6 +19,7 @@ pub struct AppState {
     pub db: sqlx::PgPool,
     pub redis: Arc<Mutex<MultiplexedConnection>>,
     pub config: ConfigModel,
+    pub tx: broadcast::Sender<ChatMessage>,
 }
 
 pub fn create_app(state: AppState) -> Router {
