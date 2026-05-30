@@ -11,9 +11,11 @@ pub async fn find_by_email(state: &AppState, email: &str) -> AppResult<Option<Us
 }
 
 pub async fn count_users(state: &AppState) -> AppResult<i64> {
+    let mut tx = state.db.begin().await?;
     let count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM users")
-        .fetch_one(&state.db)
+        .fetch_one(&mut *tx)
         .await?;
+    tx.commit().await?;
     Ok(count)
 }
 

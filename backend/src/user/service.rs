@@ -1,3 +1,5 @@
+use tracing::debug;
+
 use crate::{
     app::AppState,
     cache::user_cache::{get_user_cache, set_user_cache},
@@ -14,7 +16,7 @@ use crate::{
 
 pub async fn profile_service(state: &AppState, uuid: String) -> AppResult<ProfileUser> {
     if let Some(user) = get_user_cache(state, &uuid).await? {
-        println!("REDIS HIT");
+        debug!("REDIS HIT");
         return Ok(ProfileUser {
             uuid: user.uuid,
             name: user.name,
@@ -22,7 +24,7 @@ pub async fn profile_service(state: &AppState, uuid: String) -> AppResult<Profil
             created_at: user.created_at,
         });
     }
-    println!("REDIS MISS");
+    debug!("REDIS MISS");
 
     let profile = profile_repository(state, uuid).await?;
 
@@ -104,11 +106,11 @@ pub async fn all_friend_service(state: &AppState, uuid: String) -> AppResult<Vec
 
     for friend in friends {
         let user = if let Some(cached) = get_user_cache(state, &friend.friend_id).await? {
-            println!("REDIS HIT");
+            debug!("REDIS HIT");
 
             cached
         } else {
-            println!("REDIS MISS");
+            debug!("REDIS MISS");
 
             let db_user = find_by_uuid(state, &friend.friend_id)
                 .await?

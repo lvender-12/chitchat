@@ -1,5 +1,6 @@
 use axum::{Json, extract::State, response::IntoResponse};
 use http::StatusCode;
+use tracing::debug;
 use validator::Validate;
 
 use crate::{
@@ -18,6 +19,7 @@ pub async fn register_handler(
     Json(body): Json<RegisterDto>,
 ) -> AppResult<impl IntoResponse> {
     body.validate()?;
+    debug!("{:?}", body);
     register_service(&state, body).await?;
     Ok((
         StatusCode::CREATED,

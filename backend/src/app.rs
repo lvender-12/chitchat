@@ -14,7 +14,7 @@ use crate::{
     routes::{protected::protected_route, public::public_route, web_socket::ws_route},
 };
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct AppState {
     pub db: sqlx::PgPool,
     pub redis: Arc<Mutex<MultiplexedConnection>>,
