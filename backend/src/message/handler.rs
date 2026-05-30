@@ -7,8 +7,7 @@ use axum::{
     response::IntoResponse,
 };
 
-use http::{HeaderMap, StatusCode};
-use tracing::{debug, info};
+use tracing::debug;
 
 use crate::{
     app::AppState,
