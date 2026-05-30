@@ -1,4 +1,15 @@
-# Documentation
+# Chat App Documentation
+
+## Features
+- Authentication (login & register)
+- Friend Management
+  - Add friend
+  - List friends
+  - Pending sent requests (menunggu diterima)
+  - Incoming friend requests
+  - Accept / reject friend request
+- Realtime messaging (WebSocket)
+- User profile
 
 ## API Reference
 - [API Docs](./api/chitchat-documentation.html)
@@ -12,25 +23,53 @@
 - Rust + Axum
 - PostgreSQL
 - Redis
-- WebSocket
+- WebSocket (broadcast channel)
 
 ### Frontend
 - React + Vite
 - WebSocket client
 
-## Environment Variables
+## Configuration
+
+### Backend (`config.yaml`)
+| Key | Description | Default |
+|---|---|---|
+| `app.name` | Nama aplikasi | Chat-App |
+| `app.host` | Host server | localhost |
+| `app.port` | Port server | 3000 |
+| `db.host` | PostgreSQL host | localhost |
+| `db.port` | PostgreSQL port | 3306 |
+| `db.username` | PostgreSQL username | - |
+| `db.password` | PostgreSQL password | - |
+| `db.name` | Nama database | - |
+| `redis.host` | Redis host | localhost |
+| `redis.port` | Redis port | 3306 |
+| `redis.username` | Redis username | - |
+| `redis.password` | Redis password | - |
+| `jwt.secret` | JWT signing secret | - |
+| `jwt.expiry` | JWT expiry (seconds) | 86400 |
+| `api.secret` | API secret key | - |
+
+### Frontend (`.env`)
+| Variable | Description | Dev |
+|---|---|---|
+| `VITE_API_URL` | Backend URL | kosong (pakai proxy) |
+| `VITE_WS_URL` | WebSocket URL | kosong (pakai proxy) |
+| `VITE_API_SECRET` | API secret key | - |
+
+## Quick Start
 
 ### Backend
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `REDIS_URL` | Redis connection string |
-| `JWT_SECRET` | JWT signing secret |
-| `API_SECRET` | API secret key |
+```bash
+cd backend
+cp config.example.yaml config.yaml
+cargo run
+```
 
 ### Frontend
-| Variable | Description |
-|---|---|
-| `VITE_API_URL` | Backend URL (kosong untuk dev) |
-| `VITE_WS_URL` | WebSocket URL (kosong untuk dev) |
-| `VITE_API_SECRET` | API secret key |
+```bash
+cd frontend
+cp .env.example .env
+npm install
+npm run dev
+```
