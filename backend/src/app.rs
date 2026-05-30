@@ -1,8 +1,10 @@
 use std::sync::Arc;
 
 use axum::{Router, middleware::from_fn_with_state};
+use http::HeaderValue;
 use redis::aio::MultiplexedConnection;
 use tokio::sync::{Mutex, broadcast};
+use tower_http::cors::CorsLayer;
 
 use crate::{
     message::dto::ChatMessage,
@@ -23,6 +25,21 @@ pub struct AppState {
 }
 
 pub fn create_app(state: AppState) -> Router {
+    let cors = CorsLayer::new()
+        .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap())
+        .allow_methods([
+            http::Method::GET,
+            http::Method::POST,
+            http::Method::PATCH,
+            http::Method::DELETE,
+            http::Method::OPTIONS,
+        ])
+        .allow_headers([
+            http::header::CONTENT_TYPE,
+            http::header::HeaderName::from_static("x-api-secret"),
+        ])
+        .allow_credentials(true);
+
     Router::new()
         .merge(public_route())
         .merge(protected_route(state.clone()))
@@ -31,4 +48,5 @@ pub fn create_app(state: AppState) -> Router {
         .with_state(state)
         .fallback(not_found_middleware)
         .method_not_allowed_fallback(method_not_allowed)
+        .layer(cors)
 }
