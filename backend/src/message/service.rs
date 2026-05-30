@@ -29,11 +29,6 @@ pub async fn get_messages_service(
     state: &AppState,
     conversation_id: &String,
 ) -> AppResult<Vec<Message>> {
-    println!(
-        "converstatio id before get data from service: {}",
-        conversation_id
-    );
     let messages = get_messages(&state, &conversation_id).await?;
-    println!("messages from service: {:?}", messages);
     Ok(messages)
 }

@@ -2,7 +2,7 @@ use axum_extra::extract::{
     CookieJar,
     cookie::{Cookie, SameSite},
 };
-use tracing::{debug, info};
+use tracing::debug;
 
 use crate::{
     app::AppState,
@@ -79,8 +79,6 @@ pub async fn login_service(state: &AppState, body: LoginDto) -> AppResult<Cookie
         .same_site(SameSite::Lax)
         .path("/")
         .build();
-
-    info!(email = %body.email, user_id = %user.uuid, "login success");
 
     Ok(CookieJar::new().add(cookie))
 }

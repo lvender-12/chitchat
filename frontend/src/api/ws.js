@@ -1,6 +1,7 @@
 export function createChatSocket(conversationId, onMessage, onOpen, onClose) {
-  const host = window.location.host; // localhost:5173
-  const ws = new WebSocket(`ws://${host}/ws/message/${conversationId}`);
+  const ws = new WebSocket(
+    `${import.meta.env.VITE_WS_URL}/ws/message/${conversationId}`,
+  );
   ws.onopen = () => {
     console.log("WebSocket connected");
     onOpen?.();

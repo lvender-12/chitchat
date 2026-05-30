@@ -26,6 +26,5 @@ pub async fn get_messages(
     .bind(conversation_id)
     .fetch_all(&state.db)
     .await?;
-    println!("messages from repo: {:?}", messages);
     Ok(messages)
 }
