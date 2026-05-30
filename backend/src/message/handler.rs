@@ -7,6 +7,8 @@ use axum::{
     response::IntoResponse,
 };
 
+use tracing::{debug, info};
+
 use crate::{
     app::AppState,
     message::{
@@ -22,6 +24,7 @@ pub async fn ws_handler(
     State(state): State<AppState>,
     Path(uuid): Path<String>,
 ) -> impl IntoResponse {
+    debug!("ws_handler: uuid={uuid} ws HIT");
     ws.on_upgrade(move |socket| handle_socket_message(socket, claims, state, uuid))
 }
 

@@ -76,7 +76,7 @@ pub async fn login_service(state: &AppState, body: LoginDto) -> AppResult<Cookie
 
     let cookie = Cookie::build(("token", token))
         .http_only(true)
-        .same_site(SameSite::Strict)
+        .same_site(SameSite::None)
         .path("/")
         .build();
 
