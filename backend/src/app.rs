@@ -36,7 +36,11 @@ pub fn create_app(state: AppState) -> Router {
         ])
         .allow_headers([
             http::header::CONTENT_TYPE,
+            http::header::UPGRADE,
+            http::header::CONNECTION,
             http::header::HeaderName::from_static("x-api-secret"),
+            http::header::HeaderName::from_static("sec-websocket-key"),
+            http::header::HeaderName::from_static("sec-websocket-version"),
         ])
         .allow_credentials(true);
 
@@ -45,8 +49,8 @@ pub fn create_app(state: AppState) -> Router {
         .merge(protected_route(state.clone()))
         .merge(ws_route(state.clone()))
         .layer(from_fn_with_state(state.clone(), api_keys_middleware))
+        .layer(cors)
         .with_state(state)
         .fallback(not_found_middleware)
         .method_not_allowed_fallback(method_not_allowed)
-        .layer(cors)
 }
