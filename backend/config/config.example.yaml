@@ -18,3 +18,4 @@ jwt:
   expiry: 86400
 api:
   secret: Your_Secret
+allowed_origins: "Your_Origin"

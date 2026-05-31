@@ -7,6 +7,7 @@ pub struct ConfigModel {
     pub redis: RedisConfig,
     pub jwt: JwtConfig,
     pub api: ApiConfig,
+    pub allowed_origins: String,
 }
 
 #[derive(Debug, Deserialize, Clone)]

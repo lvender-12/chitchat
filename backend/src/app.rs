@@ -26,7 +26,7 @@ pub struct AppState {
 
 pub fn create_app(state: AppState) -> Router {
     let cors = CorsLayer::new()
-        .allow_origin("http://localhost:5173".parse::<HeaderValue>().unwrap())
+        .allow_origin(state.config.allowed_origins.parse::<HeaderValue>().unwrap())
         .allow_methods([
             http::Method::GET,
             http::Method::POST,
