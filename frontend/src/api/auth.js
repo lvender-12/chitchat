@@ -2,7 +2,7 @@ import { BASE_URL, getHeaders } from "./config";
 
 export async function login(email, password) {
   const res = await fetch(`${BASE_URL}/auth/login`, {
-    method: "POST", // ← pastikan ada ini
+    method: "POST",
     headers: getHeaders(),
     credentials: "include",
     body: JSON.stringify({ email, password }),

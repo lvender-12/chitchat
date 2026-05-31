@@ -84,14 +84,12 @@ export default function MainLayout() {
       (data) => {
         const myId = profileRef.current?.uuid;
         if (Array.isArray(data)) {
-          // history messages saat pertama connect
           const history = data.map((msg) => ({
             ...msg,
             self: msg.sender_id === myId,
           }));
           setMessages(history);
         } else {
-          // pesan realtime masuk
           setMessages((prev) => [
             ...prev,
             { ...data, self: data.sender_id === myId },
@@ -274,35 +272,20 @@ export default function MainLayout() {
           )}
         </div>
 
-        {/* Profile bottom */}
+        {/* ── PROFILE BOTTOM ── */}
         <div style={{ position: "relative" }}>
           {showProfile && (
             <div className="profile-dropdown">
-              <div
-                style={{
-                  padding: "14px 16px",
-                  borderBottom: "1px solid var(--border)",
+              <button
+                className="dropdown-item"
+                onClick={() => {
+                  setShowProfile(false);
+                  navigate("/app/profile");
                 }}
               >
-                <div
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: "var(--text-primary)",
-                  }}
-                >
-                  {profile?.name || "User"}
-                </div>
-                <div
-                  style={{
-                    fontSize: 12,
-                    color: "var(--text-muted)",
-                    marginTop: 2,
-                  }}
-                >
-                  {profile?.email || ""}
-                </div>
-              </div>
+                👤 Profil
+              </button>
+              <div className="dropdown-divider" />
               <button className="dropdown-item danger" onClick={handleLogout}>
                 🚪 Keluar
               </button>

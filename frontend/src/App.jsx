@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainLayout from "./pages/MainLayout";
+import ProfilePage from "./pages/ProfilePage";
 
 export default function App() {
   return (
@@ -26,6 +27,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <MainLayout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/app/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />
