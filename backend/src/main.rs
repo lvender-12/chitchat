@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use backend::{
     app::{AppState, create_app},
     config::{config::load_config, db::load_db, redis::load_redis},
@@ -31,7 +33,7 @@ async fn main() {
     let state = AppState {
         db,
         redis,
-        config: conf,
+        config: Arc::new(conf),
         tx,
     };
 

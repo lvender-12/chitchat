@@ -20,7 +20,7 @@ use crate::{
 pub struct AppState {
     pub db: sqlx::PgPool,
     pub redis: Arc<Mutex<MultiplexedConnection>>,
-    pub config: ConfigModel,
+    pub config: Arc<ConfigModel>,
     pub tx: broadcast::Sender<ChatMessage>,
 }
 

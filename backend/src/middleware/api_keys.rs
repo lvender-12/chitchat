@@ -16,7 +16,7 @@ pub async fn api_keys_middleware(
     req: Request,
     next: Next,
 ) -> AppResult<Response> {
-    let api_key = state.config.api.secret;
+    let api_key = &state.config.api.secret;
     let secret = headers
         .get("X-API-SECRET")
         .and_then(|h| h.to_str().ok())
